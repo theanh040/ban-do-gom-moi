@@ -1,0 +1,198 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Đảm bảo tính toán kích thước bao gồm padding và border */
+  font-family: 'Arial', sans-serif; /* Sử dụng font hiện đại hơn */
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  background-color: #f5f5f5; /* Nền nhạt nhẹ nhàng */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Đảm bảo body chiếm toàn bộ chiều cao viewport */
+}
+
+/* Container nội dung chính */
+.container {
+  max-width: 480px; /* Giảm kích thước container để vừa phải, hiện đại hơn */
+  margin: 50px auto;
+  padding: 30px; /* Tăng padding để không gian thoáng hơn */
+  background-color: #ffffff; /* Nền trắng cho container */
+  border-radius: 15px; /* Bo góc lớn hơn */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Bóng đổ tinh tế hơn */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng mượt */
+}
+
+
+/* Tiêu đề */
+.content h1 {
+  text-align: center;
+  color: #2b7ed1; /* Màu xanh dương nổi bật */
+  margin-bottom: 30px; /* Tăng khoảng cách dưới tiêu đề */
+  font-size: 2.5em; /* Tăng kích thước tiêu đề */
+  font-weight: 700; /* In đậm hơn */
+}
+
+/* Phần form đăng nhập */
+.dangnhap {
+  display: flex;
+  flex-direction: column;
+  gap: 25px; /* Tăng khoảng cách giữa các trường */
+}
+
+/* Control form */
+.form-control {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-control label {
+  margin-bottom: 8px; /* Tăng khoảng cách dưới label */
+  font-weight: 500; /* In nhẹ để nổi bật */
+  color: #333; /* Màu chữ đậm hơn */
+  font-size: 1.1em; /* Tăng kích thước chữ label */
+}
+
+.form-control input {
+  padding: 12px 15px; /* Tăng padding cho input */
+  border: 1px solid #e0e0e0; /* Viền nhạt hơn */
+  border-radius: 8px; /* Bo góc lớn hơn */
+  font-size: 1em; /* Kích thước chữ trong input */
+  background-color: #fafafa; /* Nền nhạt cho input */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng mượt */
+}
+
+.form-control input:focus {
+  border-color: #007acc; /* Viền xanh dương khi focus */
+  outline: none; /* Loại bỏ outline mặc định */
+  box-shadow: 0 0 8px rgba(0, 122, 204, 0.3); /* Bóng đổ khi focus */
+}
+
+/* Thông báo lỗi */
+.error {
+  color: #ff4444; /* Màu đỏ nổi bật */
+  font-size: 0.9em; /* Giảm kích thước chữ lỗi */
+  margin-top: 5px; /* Khoảng cách trên */
+  text-align: left; /* Căn trái */
+}
+
+/* Nút hành động */
+.action {
+  text-align: center;
+  margin-top: 20px; /* Tăng khoảng cách trên nút */
+}
+
+.btn {
+  padding: 12px 30px; /* Giữ kích thước nút */
+  background-color: #007acc; /* Giữ màu xanh dương */
+  color: white;
+  border: none;
+  border-radius: 8px; /* Bo góc lớn hơn */
+  font-size: 1.1em; /* Tăng kích thước chữ */
+  cursor: pointer;
+  width: 150px; /* Tăng chiều rộng nút */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Hiệu ứng mượt */
+}
+
+.btn:hover {
+  background-color: #0056b3; /* Màu đậm hơn khi hover */
+  transform: scale(1.05); /* Phóng to nhẹ khi hover */
+}
+
+/* Liên kết hoặc thông báo signup */
+.signup {
+  text-align: center;
+  margin-top: 15px; /* Tăng khoảng cách trên */
+}
+
+.signup p {
+  color: #666; /* Màu xám nhạt */
+  font-size: 1em; /* Tăng kích thước chữ */
+}
+
+.signup a {
+  color: #007acc; /* Màu xanh dương cho link */
+  text-decoration: none; /* Loại bỏ gạch chân */
+  font-weight: 500; /* In nhẹ để nổi bật */
+}
+
+.signup a:hover {
+  text-decoration: underline; /* Thêm gạch chân khi hover */
+}
+
+/* Footer */
+.footer {
+  width: 100%;
+  height: 200px;
+  margin-top: 20px;
+  background-color: #1f2937; /* Nền tối cho footer */
+  color: #fff;
+  padding: 30px 20px;
+  margin-top: auto; /* Đẩy footer xuống dưới cùng */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+      max-width: 90%; /* Giảm chiều rộng trên mobile */
+      margin: 30px auto;
+      padding: 20px; /* Giảm padding trên mobile */
+  }
+
+  .content h1 {
+      font-size: 2em; /* Giảm kích thước tiêu đề */
+      margin-bottom: 20px;
+  }
+
+  .dangnhap {
+      gap: 20px; /* Giảm khoảng cách giữa các trường */
+  }
+
+  .form-control label {
+      font-size: 1em; /* Giảm kích thước chữ label */
+  }
+
+  .form-control input {
+      padding: 10px 12px; /* Giảm padding cho input */
+      font-size: 0.9em; /* Giảm kích thước chữ input */
+  }
+
+  .btn {
+      width: 120px; /* Giảm chiều rộng nút */
+      font-size: 1em; /* Giảm kích thước chữ nút */
+      padding: 10px 25px; /* Giảm padding nút */
+  }
+
+  .footer {
+      height: auto; /* Tự động điều chỉnh chiều cao footer trên mobile */
+      padding: 20px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+      max-width: 85%; /* Giảm thêm chiều rộng trên màn hình rất nhỏ */
+      padding: 15px;
+  }
+
+  .content h1 {
+      font-size: 1.8em; /* Giảm thêm kích thước tiêu đề */
+  }
+
+  .form-control label {
+      font-size: 0.9em; /* Giảm thêm kích thước chữ label */
+  }
+
+  .btn {
+      width: 100px; /* Giảm thêm chiều rộng nút */
+      font-size: 0.9em; /* Giảm thêm kích thước chữ nút */
+      padding: 8px 20px; /* Giảm padding nút */
+  }
+
+  .signup p {
+      font-size: 0.9em; /* Giảm kích thước chữ */
+  }
+}

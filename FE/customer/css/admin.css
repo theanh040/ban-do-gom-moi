@@ -1,0 +1,822 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    z-index: 1;
+}
+
+.dashboard {
+    display: flex;
+    height: 100vh;
+    z-index: 1;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #343a40;
+    color: #fff;
+    padding: 20px;
+}
+
+.sidebar h3 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar li:hover {
+    background-color: #495057;
+}
+
+.sidebar li.active {
+    background-color: #007bff;
+}
+
+.submenu {
+    display: none;
+    list-style: none;
+    padding-left: 15px;
+    margin-top: 5px;
+}
+
+.submenu li {
+    padding: 8px 10px;
+    background-color: #495057;
+    margin: 2px 0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submenu li:hover {
+    background-color: #6c757d;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 20px;
+    background-color: #fff;
+    overflow-y: auto;
+}
+
+.main-content h2 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.content {
+    display: none;
+}
+
+.content.active {
+    display: block;
+}
+
+.log-out {
+    position: absolute;
+    bottom: 40px;
+}
+
+.log-out a {
+    color: #FFF;
+    text-decoration: none;
+}
+
+iframe.addproduct {
+    width: 100%;
+    height: 100vh;
+    border: none;
+    overflow: hidden;
+    display: block;
+}
+
+.overview-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.stat-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.stat-card h3 {
+    color: #333;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+.stat-card p {
+    color: #007bff;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+/* Trong admin.css */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* Thẻ sản phẩm trong admin */
+.product-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.product-card h3 {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.product-card p {
+    font-size: 1em;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.product-card .product-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center; /* Canh giữa nút */
+}
+
+.product-card .delete-btn, .product-card .edit-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.product-card .delete-btn {
+    background-color: #ff4444;
+    color: #fff;
+}
+
+.product-card .delete-btn:hover {
+    background-color: #cc0000;
+    transform: scale(1.05);
+}
+
+.product-card .edit-btn {
+    background-color: #2b7ed1;
+    color: #fff;
+}
+
+.product-card .edit-btn:hover {
+    background-color: #1a5da7;
+    transform: scale(1.05);
+}
+
+/* Responsive design (giữ nguyên như trước, chỉ thêm style cho nút nếu cần) */
+@media (max-width: 1024px) {
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+    }
+
+    .product-card {
+        padding: 10px;
+    }
+
+    .product-card img {
+        height: 180px;
+    }
+
+    .product-card .delete-btn, .product-card .edit-btn {
+        padding: 6px 12px;
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 768px) {
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 10px;
+    }
+
+    .product-card {
+        padding: 8px;
+    }
+
+    .product-card img {
+        height: 160px;
+    }
+
+    .product-card .delete-btn, .product-card .edit-btn {
+        padding: 5px 10px;
+        font-size: 0.7em;
+    }
+}
+
+@media (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 8px;
+    }
+
+    .product-card {
+        padding: 5px;
+    }
+
+    .product-card img {
+        height: 140px;
+    }
+
+    .product-card .delete-btn, .product-card .edit-btn {
+        padding: 4px 8px;
+        font-size: 0.6em;
+    }
+}
+
+/* Trong admin.css */
+.daily-revenue-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.daily-revenue-section h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.daily-revenue-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.daily-revenue-table th,
+.daily-revenue-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 1em;
+    color: #333;
+}
+
+.daily-revenue-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+.daily-revenue-table tr:hover {
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .daily-revenue-section {
+        padding: 10px;
+    }
+
+    .daily-revenue-section h3 {
+        font-size: 1.2em;
+    }
+
+    .daily-revenue-table th,
+    .daily-revenue-table td {
+        padding: 8px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    .daily-revenue-section {
+        padding: 5px;
+    }
+
+    .daily-revenue-section h3 {
+        font-size: 1em;
+    }
+
+    .daily-revenue-table th,
+    .daily-revenue-table td {
+        padding: 6px;
+        font-size: 0.8em;
+    }
+
+    .daily-revenue-table th {
+        display: none; /* Ẩn header trên mobile nếu cần */
+    }
+
+    .daily-revenue-table td {
+        display: block;
+        text-align: right;
+    }
+
+    .daily-revenue-table td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 10px;
+        color: #666;
+    }
+}
+/* Trong admin.css */
+.orders-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.orders-actions {
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.order-search, .order-status-filter {
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 1em;
+    width: 200px;
+}
+
+.order-status-filter {
+    width: 150px;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.orders-table th,
+.orders-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 1em;
+    color: #333;
+}
+
+.orders-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+.orders-table tr:hover {
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+}
+
+.orders-table .action-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.orders-table .view-btn {
+    background-color: #2b7ed1;
+    color: #fff;
+}
+
+.orders-table .view-btn:hover {
+    background-color: #1a5da7;
+    transform: scale(1.05);
+}
+
+.orders-table .update-btn {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.orders-table .update-btn:hover {
+    background-color: #388E3C;
+    transform: scale(1.05);
+}
+
+.orders-table .delete-btn {
+    background-color: #ff4444;
+    color: #fff;
+}
+
+.orders-table .delete-btn:hover {
+    background-color: #cc0000;
+    transform: scale(1.05);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .orders-section {
+        padding: 10px;
+    }
+
+    .orders-actions {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .order-search, .order-status-filter {
+        width: 100%;
+    }
+
+    .orders-table th,
+    .orders-table td {
+        padding: 8px;
+        font-size: 0.9em;
+    }
+
+    .orders-table .action-btn {
+        padding: 4px 10px;
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    .orders-section {
+        padding: 5px;
+    }
+
+    .orders-table th {
+        display: none; /* Ẩn header trên mobile nếu cần */
+    }
+
+    .orders-table td {
+        display: block;
+        text-align: right;
+    }
+
+    .orders-table td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 10px;
+        color: #666;
+    }
+
+    .orders-table .action-btn {
+        padding: 3px 8px;
+        font-size: 0.7em;
+    }
+}
+/* Trong admin.css */
+.customers-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.customers-actions {
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.customer-search, .customer-role-filter {
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 1em;
+    width: 200px;
+}
+
+.customer-role-filter {
+    width: 150px;
+}
+
+.customers-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.customers-table th,
+.customers-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 1em;
+    color: #333;
+}
+
+.customers-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+.customers-table tr:hover {
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+}
+
+.customers-table .action-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.customers-table .view-btn {
+    background-color: #2b7ed1;
+    color: #fff;
+}
+
+.customers-table .view-btn:hover {
+    background-color: #1a5da7;
+    transform: scale(1.05);
+}
+
+.customers-table .update-btn {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.customers-table .update-btn:hover {
+    background-color: #388E3C;
+    transform: scale(1.05);
+}
+
+.customers-table .delete-btn {
+    background-color: #ff4444;
+    color: #fff;
+}
+
+.customers-table .delete-btn:hover {
+    background-color: #cc0000;
+    transform: scale(1.05);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .customers-section {
+        padding: 10px;
+    }
+
+    .customers-actions {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .customer-search, .customer-role-filter {
+        width: 100%;
+    }
+
+    .customers-table th,
+    .customers-table td {
+        padding: 8px;
+        font-size: 0.9em;
+    }
+
+    .customers-table .action-btn {
+        padding: 4px 10px;
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    .customers-section {
+        padding: 5px;
+    }
+
+    .customers-table th {
+        display: none; /* Ẩn header trên mobile nếu cần */
+    }
+
+    .customers-table td {
+        display: block;
+        text-align: right;
+    }
+
+    .customers-table td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 10px;
+        color: #666;
+    }
+
+    .customers-table .action-btn {
+        padding: 3px 8px;
+        font-size: 0.7em;
+    }
+}
+/* Trong admin.css */
+.reports-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.reports-actions {
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.report-period-filter, .report-date-filter {
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 1em;
+    width: 150px;
+}
+
+.report-date-filter {
+    width: 200px;
+}
+
+.report-refresh-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2b7ed1;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.report-refresh-btn:hover {
+    background-color: #1a5da7;
+    transform: scale(1.05);
+}
+
+.reports-content h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.reports-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.reports-table th,
+.reports-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 1em;
+    color: #333;
+}
+
+.reports-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+.reports-table tr:hover {
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .reports-section {
+        padding: 10px;
+    }
+
+    .reports-actions {
+        flex-direction: column;
+        gap: 5px;
+        align-items: flex-start;
+    }
+
+    .report-period-filter, .report-date-filter {
+        width: 100%;
+    }
+
+    .report-refresh-btn {
+        width: 100%;
+        padding: 6px 12px;
+        font-size: 0.9em;
+    }
+
+    .reports-table th,
+    .reports-table td {
+        padding: 8px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    .reports-section {
+        padding: 5px;
+    }
+
+    .reports-content h3 {
+        font-size: 1.2em;
+    }
+
+    .reports-table th {
+        display: none; /* Ẩn header trên mobile nếu cần */
+    }
+
+    .reports-table td {
+        display: block;
+        text-align: right;
+    }
+
+    .reports-table td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 10px;
+        color: #666;
+    }
+
+    .report-refresh-btn {
+        padding: 4px 10px;
+        font-size: 0.8em;
+    }
+}
+/* Trong admin.css */
+/* Trong admin.css */
+.reports-content canvas {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Đảm bảo biểu đồ hiển thị tốt trên các thiết bị */
+@media (min-width: 1024px) {
+    .reports-content canvas {
+        width: 800px !important;
+        height: 400px !important;
+    }
+}
+
+@media (max-width: 1023px) and (min-width: 768px) {
+    .reports-content canvas {
+        width: 600px !important;
+        height: 300px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .reports-content canvas {
+        width: 100% !important;
+        height: 250px !important;
+    }
+}

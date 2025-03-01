@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng xuất</title>
+    <link rel="stylesheet" href="/FE/customer/css/nav.css"> 
+</head>
+<body>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            localStorage.removeItem("loggedInUser"); // Xóa thông tin người dùng
+            window.location.href = "/FE/customer/views/login.html"; // Chuyển hướng về trang đăng nhập
+        });
+    </script>
+</body>
+</html>

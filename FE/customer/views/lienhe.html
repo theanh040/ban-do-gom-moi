@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liên Hệ - Lạc Hồng Store</title>
+    <link rel="stylesheet" href="/FE/customer/css/lienhe.css">
+    <link rel="stylesheet" href="/FE/customer/css/nav.css"> <!-- Để sử dụng thanh điều hướng -->
+    <link rel="icon" href="/FE/customer/images/logo/logo.png" type="image/gif" sizes="16x16">
+    <script src="https://kit.fontawesome.com/e8e6ca6395.js" crossorigin="anonymous"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOr2gsYKWOFURwmRervH_NrlYHs6uNZ08&callback=initMap" async defer></script>
+</head>
+<body>
+    <!-- Thanh điều hướng -->
+    <section class="navi">
+        <nav>
+            <div class="navigation">
+                <a href="/FE/index.html" target="_blank">
+                    <img src="/FE/customer/images/logo/Logo lachongstore 10.png" alt="Logo Lạc Hồng Store">
+                </a>
+                <div class="search-container">
+                    <form class="search" id="searchForm">
+                        <input type="text" class="search-text" id="searchInput" placeholder="Tìm kiếm..." oninput="handleSearch()">
+                        <button class="search-btn" type="button" aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
+                    <div id="searchResultsContainer" class="search-results"></div>
+                </div>
+                <a href="/FE/customer/views/cart.html" target="_blank">
+                    <button class="shopping-btn" type="button">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="label">Giỏ hàng</span>
+                    </button>
+                </a>
+                <a href="/FE/customer/views/login.html" id="userButton" target="_blank">
+                    <button class="user-btn" type="button">
+                        <i class="fa-solid fa-circle-user fa-shake"></i>
+                        <span class="label">Tài khoản</span>
+                    </button>
+                </a>
+            </div>
+        </nav>
+    </section>
+
+    <!-- Menu -->
+    <section class="menu">
+        <ul>
+            <li><a href="/FE/index.html" target="_blank">Trang chủ</a></li>
+            <li><a href="/FE/customer/views/product-binhgom.html" target="_blank">Bình Gốm</a></li>
+            <li><a href="/FE/customer/views/product.html" target="_blank">Ấm Trà</a></li>
+            <li><a href="/FE/customer/views/lienhe.html" target="_blank">Liên Hệ</a></li>
+        </ul>
+    </section>
+
+    <!-- Nội dung chính -->
+    <main class="contact-main">
+        <div class="contact-container">
+            <h1>Liên Hệ Với Chúng Tôi</h1>
+            <div class="contact-content">
+                <div class="contact-form">
+                    <h2>Gửi Tin Nhắn</h2>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Họ và Tên *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Số Điện Thoại</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Nội Dung *</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Gửi Liên Hệ</button>
+                    </form>
+                </div>
+                <div class="contact-info">
+                    <h2>Thông Tin Liên Hệ</h2>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.3583396963986!2d105.71721745099165!3d21.058357776767423!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313455d1333c3437%3A0x937a6e0ffd92b141!2sHinode%20Royal%20Park!5e0!3m2!1svi!2s!4v1740676061299!5m2!1svi!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <p><i class="fa-solid fa-map-marker-alt"></i> Địa chỉ: Khu đô thị Hinode Royal Park, Kim Chung, Lai Xá, Hoài Đức, TP. Hà Nội</p>
+                    <p><i class="fa-solid fa-phone"></i> Điện thoại: 0912 345 678</p>
+                    <p><i class="fa-solid fa-envelope"></i> Email: contact@lachongstore.com</p>
+                    <div id="map" class="map"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div class="iframe-wrapper">
+        <iframe src="/FE/customer/views/footer.html" frameborder="0" class="footer"></iframe>
+    </div>
+
+    <script src="/FE/customer/js/lienhe.js"></script>
+    <script src="/FE/customer/js/nav.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lạc Hồng Store</title>
+    <link rel="stylesheet" href="/FE/customer/css/index.css">
+    <link rel="stylesheet" href="/FE/customer/css/nav.css">
+    <link rel="icon" href="/FE/customer/images/logo/logo.png" type="image/gif" sizes="16x16">
+    <script src="https://kit.fontawesome.com/e8e6ca6395.js" crossorigin="anonymous"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOr2gsYKWOFURwmRervH_NrlYHs6uNZ08&callback=initMap" async defer></script>
+</head>
+<body>
+     <!-- Header -->
+    <!-- <div class="iframe-nav">
+        <iframe src="/FE/customer/views/nav.html" frameborder="0"></iframe>
+    </div> -->
+
+
+    <section class="navi">
+        <nav>
+            <div class="navigation">
+                <a href="/FE/index.html" target="_blank">
+                    <img src="/FE/customer/images/logo/Logo lachongstore 10.png" alt="Logo cong ty">
+                </a>
+
+                <!-- Thanh tìm kiếm -->
+                <div class="search-container">
+                    <form class="search">
+                        <input type="text" class="search-text" id="searchInput" placeholder="Tìm kiếm..." oninput="handleSearch()">
+                        <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
+                    <div id="searchResultsContainer" class="search-results"></div>
+                </div>
+                
+                
+                <!-- Thông tin vị trí -->
+                <div id="location">
+                    <div id="map" style="width: 200px; height: 40px;"></div> 
+                </div>
+
+                <!-- Giỏ hàng và tài khoản -->
+                <a href="/FE/customer/views/cart.html" target="_blank">
+                    <button class="shopping-btn">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="label">Giỏ hàng</span>
+                    </button>
+                </a>
+                <a href="/FE/customer/views/login.html" target="_blank" id="userButton">
+                    <button class="user-btn" type="button">
+                        <i class="fa-solid fa-circle-user fa-shake"></i>
+                        <span class="label">Tài khoản</span>
+                    </button>
+                </a>
+            </div>
+        </nav>
+    </section>
+
+    <!-- Menu -->
+    <section class="menu">
+        <ul>
+            <li><a href="/FE/index.html" target="_blank">Trang chủ</a></li>
+            <li><a href="/FE/customer/views/product-binhgom.html" target="_blank">Bình Gốm</a></li>
+            <li><a href="/FE/customer/views/product.html" target="_blank">Ấm Trà</a></li>
+            <li><a href="/FE/customer/views/lienhe.html" target="_blank">Liên Hệ</a></li>
+        </ul>
+    </section>
+
+   
+     <!-- banner -->
+    <section class="slider">
+        <div class="list">
+           <div class="item">
+            <img src="/FE/customer/images/banner/slide_1_img.jpg" alt="">
+           </div>
+           <div class="item">
+            <img src="/FE/customer/images/banner/banner2.png" alt="">
+           </div>
+           <div class="item">
+            <img src="/FE/customer/images/banner/banner 3.png" alt="">
+           </div>
+        </div>
+           <div class="buttons">
+            <button id="prev"><</button>
+            <button id="next">></button>
+           </div>
+           <ul class="dots">
+            <li class="active"></li>
+            <li></li>
+            <li></li>
+           </ul>
+    </section>
+
+     <!-- Sản phẩm sale -->
+    <div class="sales">
+        <div class="title">
+            <h2>SẢN PHẨM ĐANG GIẢM GIÁ</h2>
+        </div>
+            <section class="products-grid" id="productGrid">
+              
+            </section>
+    </div>
+    
+    <h2 class="h2-gift">SẢM PHẨM BÁN CHẠY</h2>
+    <div class="gift">
+        <div class="title-gif">
+        
+            <img src="/FE/customer/images/banner/home_coll_1_banner.jpg" alt="">
+        </div>
+        <section class="products-grid" id="productGrids">
+              
+        </section>
+    </div>
+
+
+    <!-- footer -->
+    <div class="iframe-wrapper">
+        <iframe src="/FE/customer/views/footer.html" frameborder="0" class="footer"></iframe>
+    </div>
+    <script src="/FE/customer/js/cart.js" defer></script>
+    <script src="/FE/customer/js/index.js" defer></script>
+    <script src="/FE/customer/js/nav.js" defer></script>
+</body>
+</html>

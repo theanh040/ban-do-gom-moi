@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chỉnh sửa sản phẩm - Admin Dashboard - Lạc Hồng Store</title>
+    <link rel="stylesheet" href="/FE/customer/css/admin.css">
+    <link rel="stylesheet" href="/FE/customer/css/addproduct.css">
+    <link rel="icon" href="/FE/customer/images/logo/logo.png" type="image/gif" sizes="16x16">
+    <script src="https://kit.fontawesome.com/e8e6ca6395.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+
+    <main class="admin-main">
+        <h1>Chỉnh sửa sản phẩm</h1>
+        <form id="editProductForm" class="product-form">
+            <input type="hidden" id="productId" name="product_id">
+            <div class="form-group">
+                <label for="productName">Tên sản phẩm:</label>
+                <input type="text" id="productName" name="product_name" required>
+            </div>
+            <div class="form-group">
+                <label for="price">Giá:</label>
+                <input type="number" id="price" name="price" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Mô tả:</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="image">Hình ảnh:</label>
+                <input type="file" id="image" name="image" accept="image/*">
+                <img id="productImagePreview" src="" alt="Xem trước hình ảnh" style="max-width: 200px; display: none;">
+            </div>
+            <div class="form-group">
+                <label for="categoryId">Danh mục:</label>
+                <select id="categoryId" name="category_id" required>
+                    <option value="1">Bình Gốm</option>
+                    <option value="2">Ấm Trà</option>
+                    <option value="3">Đồ Gốm Khác</option>
+                </select>
+            </div>
+            <button type="submit" class="submit-btn">Cập nhật sản phẩm</button>
+        </form>
+    </main>
+
+    <script src="/FE/customer/js/edit-product.js"></script> <!-- Tạo file JavaScript riêng -->
+
+</body>
+</html>

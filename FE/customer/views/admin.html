@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/FE/customer/css/admin.css">
+    <link rel="stylesheet" href="/FE/customer/css/addproduct.css">
+    <link rel="stylesheet" href="/FE/customer/css/products.css">
+</head>
+
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3>Menu</h3>
+            <ul>
+                <li onclick="showContent('overview')">Tổng quan</li>
+                <li onclick="showContent('orders')">Đơn hàng</li>
+                <li>
+                    <span onclick="toggleSubMenu(event, 'productsMenu')">Sản phẩm</span>
+                    <ul class="submenu" id="productsMenu">
+                        <li onclick="showContent('createPr')">Tạo sản phẩm</li>
+                        <li onclick="showContent('delPr')">Xóa sản phẩm</li>
+                        <li onclick="showContent('updatePr')">Cập nhật sản phẩm</li>
+                    </ul>
+                </li>
+                <li onclick="showContent('customers')">Khách hàng</li>
+                <li onclick="showContent('reports')">Báo cáo</li>
+                <li class="log-out"><a href="/FE/index.html">Đăng xuất</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div id="overview" class="content">
+                <h2>Tổng quan</h2>
+                <div class="overview-stats">
+                    <div class="stat-card">
+                        <h3>Doanh thu Tổng</h3>
+                        <p id="totalRevenue">0 VND</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Tổng Đơn Hàng</h3>
+                        <p id="totalOrders">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Sản Phẩm Đã Bán</h3>
+                        <p id="totalProductsSold">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Khách Hàng Mới</h3>
+                        <p id="newCustomers">0</p>
+                    </div>
+                </div>
+                <!-- Phần doanh thu theo ngày (giữ nguyên như trước) -->
+                <div class="daily-revenue-section">
+                    <h3>Doanh thu theo ngày</h3>
+                    <table id="dailyRevenueTable" class="daily-revenue-table">
+                        <thead>
+                            <tr>
+                                <th>Ngày</th>
+                                <th>Doanh thu (VND)</th>
+                                <th>Số Đơn Hàng</th>
+                                <th>Số Sản Phẩm Bán</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dailyRevenueBody">
+                            <!-- Dữ liệu sẽ được thêm động qua JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="orders" class="content" style="display: none;">
+                <h2>Đơn hàng</h2>
+                <div class="orders-section">
+                    <div class="orders-actions">
+                        <input type="text" id="orderSearch" placeholder="Tìm kiếm đơn hàng..." class="order-search">
+                        <select id="orderStatusFilter" class="order-status-filter">
+                            <option value="">Tất cả trạng thái</option>
+                            <option value="pending">Đang chờ</option>
+                            <option value="processing">Đang xử lý</option>
+                            <option value="shipped">Đã giao</option>
+                            <option value="completed">Hoàn thành</option>
+                            <option value="cancelled">Đã hủy</option>
+                        </select>
+                    </div>
+                    <table id="ordersTable" class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>ID Đơn Hàng</th>
+                                <th>Người Dùng</th>
+                                <th>Tổng Giá</th>
+                                <th>Trạng Thái</th>
+                                <th>Ngày Đặt</th>
+                                <th>Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersBody">
+                            <!-- Dữ liệu sẽ được thêm động qua JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="createPr" class="content" style="display: none;">
+                <iframe class="addproduct" src="/FE/customer/views/addproduct.html" frameborder="0"></iframe>
+            </div>
+            <div id="delPr" class="content" style="display: none;">
+                <section class="products-title">
+                    <h2>Xóa sản phẩm</h2>
+                </section>
+                <section class="products-grid" id="productsGridDelete">
+                    <!-- Danh sách sản phẩm để xóa sẽ được hiển thị tại đây -->
+                </section>
+            </div>
+            <div id="updatePr" class="content" style="display: none;">
+                <section class="products-title">
+                    <h2>Cập nhật sản phẩm</h2>
+                </section>
+                <section class="products-grid" id="productsGridUpdate">
+                    <!-- Danh sách sản phẩm để cập nhật sẽ được hiển thị tại đây -->
+                </section>
+            </div>
+            <div id="customers" class="content" style="display: none;">
+                <h2>Khách hàng</h2>
+                <div class="customers-section">
+                    <div class="customers-actions">
+                        <input type="text" id="customerSearch" placeholder="Tìm kiếm khách hàng..."
+                            class="customer-search">
+                        <select id="customerRoleFilter" class="customer-role-filter">
+                            <option value="">Tất cả vai trò</option>
+                            <option value="admin">Admin</option>
+                            <option value="customer">Khách hàng</option>
+                        </select>
+                    </div>
+                    <table id="customersTable" class="customers-table">
+                        <thead>
+                            <tr>
+                                <th>ID Khách Hàng</th>
+                                <th>Tên Đăng Nhập</th>
+                                <th>Email</th>
+                                <th>Vai Trò</th>
+                                <th>Ngày Đăng Ký</th>
+                                <th>Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customersBody">
+                            <!-- Dữ liệu sẽ được thêm động qua JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="reports" class="content" style="display: none;">
+                <h2>Báo cáo</h2>
+                <div class="reports-section">
+                    <div class="reports-actions">
+                        <label for="reportPeriod">Lọc theo thời gian:</label>
+                        <select id="reportPeriod" class="report-period-filter">
+                            <option value="daily">Hàng ngày</option>
+                            <option value="weekly">Hàng tuần</option>
+                            <option value="monthly" selected>Hàng tháng</option>
+                            <option value="yearly">Hàng năm</option>
+                        </select>
+                        <input type="date" id="reportDate" class="report-date-filter">
+                        <button onclick="loadReports()" class="report-refresh-btn">Làm mới</button>
+                    </div>
+                    <div id="reportsContent" class="reports-content">
+                        <h3>Kết quả báo cáo</h3>
+                        <canvas id="reportsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"
+        integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/FE/customer/js/admin.js" defer></script>
+    <script src="/FE/customer/js/admin-products.js" defer></script>
+    <script src="/FE/customer/js/admin-orders.js" defer></script>
+    <script src="/FE/customer/js/admin-customers.js" defer></script>
+    <script src="/FE/customer/js/admin-reports.js" defer></script>
+</body>
+
+</html>

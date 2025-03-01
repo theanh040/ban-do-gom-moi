@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết sản phẩm - Lạc Hồng Store</title>
+    <link rel="stylesheet" href="/FE/customer/css/product-detail.css"> <!-- Tạo file CSS riêng -->
+    <link rel="stylesheet" href="/FE/customer/css/nav.css"> <!-- Sử dụng nav.css hiện có -->
+    <link rel="icon" href="/FE/customer/images/logo/logo.png" type="image/gif" sizes="16x16">
+    <script src="https://kit.fontawesome.com/e8e6ca6395.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <section class="navi">
+        <nav>
+            <div class="navigation">
+                <a href="/FE/index.html" target="_blank">
+                    <img src="/FE/customer/images/logo/Logo lachongstore 10.png" alt="Logo Lạc Hồng Store">
+                </a>
+                <div class="search-container">
+                    <form class="search" id="searchForm">
+                        <input type="text" class="search-text" id="searchInput" placeholder="Tìm kiếm..." value="">
+                        <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
+                    <div id="searchResultsContainer" class="search-results"></div>
+                </div>
+                <a href="/FE/customer/views/cart.html" target="_blank">
+                    <button class="shopping-btn">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="label">Giỏ hàng</span>
+                    </button>
+                </a>
+                <a href="/FE/customer/views/login.html" target="_blank" id="userButton">
+                    <button class="user-btn" type="button">
+                        <i class="fa-solid fa-circle-user fa-shake"></i>
+                        <span class="label">Tài khoản</span>
+                    </button>
+                </a>
+            </div>
+        </nav>
+    </section>
+
+    <section class="menu">
+        <ul>
+            <li><a href="/FE/index.html" target="_blank">Trang chủ</a></li>
+            <li><a href="/FE/customer/views/product-binhgom.html" target="_blank">Bình Gốm</a></li>
+            <li><a href="/FE/customer/views/product.html" target="_blank">Ấm Trà</a></li>
+            <li><a href="/FE/customer/views/lienhe.html" target="_blank">Liên Hệ</a></li>
+        </ul>
+    </section>
+
+    <main class="product-detail-main">
+        <div class="product-detail-container">
+            <div class="product-detail-image">
+                <img id="productImage" src="" alt="Sản phẩm" onerror="this.src='/BE/uploads/default.jpg'">
+            </div>
+            <div class="product-detail-info">
+                <h1 id="productName"></h1>
+                
+                <div class="product-price-container">
+                <span>Giá: </span>: <p class="product-price" id="productPrice"></p>
+            </div>
+                <div class="quantity-control">
+                    <span>Số lượng: </span>
+                    <button id="decreaseQty">-</button>
+                    <input type="number" id="quantity" value="1" min="1" readonly>
+                    <button id="increaseQty">+</button>
+                </div>
+                <button id="addToCartBtn" class="add-to-cart-btn">Thêm vào giỏ</button>
+                <div class="shipping-info">
+                    <p><i class="fa-solid fa-truck"></i> Miễn phí giao hàng</p>
+                    <p><i class="fa-solid fa-shield-alt"></i> Hoàn tiền 100% nếu hàng giả</p>
+                    <p><i class="fa-solid fa-phone"></i> Hỗ trợ 24/7</p>
+                    <p><i class="fa-solid fa-undo"></i> Đổi trả trong 10 ngày</p>
+                </div>
+                <h3>Voucher dành cho bạn</h3>
+                <div class="vouchers">
+                   
+                    <div class="voucher-item">
+                        <img src="/FE/customer/images/voucher-free-shipping.webp" alt="Miễn phí vận chuyển">
+                        <p>Miễn phí vận chuyển</p>
+                        <p>Mã: LHFREE300</p>
+                        <p>HSD: 31/12/2025</p>
+                        <button class="copy-btn">Sao chép mã</button>
+                    </div>
+                    <div class="voucher-item">
+                        <img src="/FE/customer/images/voucher-5-percent.webp" alt="Giảm 5%">
+                        <p>Giảm 5% đơn hàng</p>
+                        <p>Mã: LHTET2025</p>
+                        <p>HSD: 19/01/2025</p>
+                        <button class="copy-btn">Sao chép mã</button>
+                    </div>
+                    <div class="voucher-item">
+                        <img src="/FE/customer/images/voucher-100k.webp" alt="Combo giảm 100k">
+                        <p>Combo giảm 100k</p>
+                        <p>Mã: LHCOMBO100</p>
+                        <p>HSD: 19/01/2025</p>
+                        <button class="copy-btn">Sao chép mã</button>
+                    </div>
+                    <div class="voucher-item">
+                        <img src="/FE/customer/images/voucher-10-percent.webp" alt="Giảm 10% hàng mới">
+                        <p>Giảm 10% hàng mới</p>
+                        <p>Mã: LHNEW10</p>
+                        <p>HSD: 19/01/2025</p>
+                        <button class="copy-btn">Sao chép mã</button>
+                    </div>
+                </div>
+                <div class="product-detail-description">
+                    <h2>Mô tả sản phẩm</h2>
+                    <p id="productDescription"></p>
+            </div>
+            </div>
+            
+    </main>
+    
+
+    <div class="iframe-wrapper">
+        <iframe src="/FE/customer/views/footer.html" frameborder="0" class="footer"></iframe>
+    </div>
+
+    <script src="/FE/customer/js/product-detail.js"></script> <!-- Tạo file JavaScript riêng -->
+    <script src="/FE/customer/js/nav.js"></script>
+</body>
+</html>

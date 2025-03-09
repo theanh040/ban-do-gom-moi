@@ -15,13 +15,19 @@ $input = file_get_contents("php://input");
 $data = json_decode($input, true);
 
 $user_id = $data["user_id"] ?? null;
+$buyer_name = $data["buyer_name"] ?? null;
+$buyer_phone = $data["buyer_phone"] ?? null;
+$buyer_address = $data["buyer_address"] ?? null;
 
-if (!$user_id || !is_numeric($user_id)) {
-    echo json_encode(["success" => false, "message" => "User ID không hợp lệ."]);
+if (!$user_id || !is_numeric($user_id) || !$buyer_name || !$buyer_phone || !$buyer_address) {
+    echo json_encode(["success" => false, "message" => "Dữ liệu không đầy đủ."]);
     exit;
 }
 
 $user_id = (int)$user_id;
+$buyer_name = $conn->real_escape_string($buyer_name);
+$buyer_phone = $conn->real_escape_string($buyer_phone);
+$buyer_address = $conn->real_escape_string($buyer_address);
 
 try {
     // Kiểm tra user tồn tại
@@ -33,7 +39,7 @@ try {
         exit;
     }
 
-    // Lấy đơn hàng pending
+    // Lấy đơn hàng pending của user
     $stmt = $conn->prepare("SELECT order_id, total_price FROM orders WHERE user_id = ? AND order_status = 'pending'");
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
@@ -48,33 +54,35 @@ try {
     $order_id = $order["order_id"];
     $total_price = $order["total_price"];
 
-    // Tạo hoặc cập nhật đơn hàng trong bảng orders_history (nếu cần)
-    $stmt = $conn->prepare("INSERT INTO order_history (user_id, order_id, total_price, payment_method, order_status, order_date) 
-                           VALUES (?, ?, ?, 'cod', 'completed', NOW())
-                           ON DUPLICATE KEY UPDATE total_price = ?, payment_method = 'cod', order_status = 'completed', order_date = NOW()");
-    $stmt->bind_param("iidd", $user_id, $order_id, $total_price, $total_price);
+    // Cập nhật trạng thái đơn hàng thành 'completed' và lưu thông tin người mua
+    $stmt = $conn->prepare("UPDATE orders SET order_status = 'completed', order_date = NOW(), buyer_name = ?, buyer_phone = ?, buyer_address = ? WHERE order_id = ?");
+    $stmt->bind_param("sssi", $buyer_name, $buyer_phone, $buyer_address, $order_id);
     $stmt->execute();
 
-    // Cập nhật trạng thái đơn hàng thành 'completed' với phương thức COD
-    $stmt = $conn->prepare("UPDATE orders SET order_status = 'completed', payment_method = 'cod', order_date = NOW() WHERE order_id = ?");
-    $stmt->bind_param("i", $order_id);
+    // (Tùy chọn) Lưu lịch sử đơn hàng vào bảng khác nếu cần
+   
+    $stmt = $conn->prepare("INSERT INTO order_history (order_id, user_id, total_price, order_status, order_date, buyer_name, buyer_phone, buyer_address) 
+                           VALUES (?, ?, ?, 'completed', NOW(), ?, ?, ?)");
+    $stmt->bind_param("iissss", $order_id, $user_id, $total_price, $buyer_name, $buyer_phone, $buyer_address);
     $stmt->execute();
+ 
 
-    // Xóa đơn hàng pending sau khi hoàn tất
-    $stmt = $conn->prepare("DELETE FROM orders WHERE order_id = ? AND order_status = 'completed'");
-    $stmt->bind_param("i", $order_id);
-    $stmt->execute();
-
-    // Xóa các mục trong order_items
+    // Xóa các mục trong order_items liên quan
     $stmt = $conn->prepare("DELETE FROM order_items WHERE order_id = ?");
     $stmt->bind_param("i", $order_id);
     $stmt->execute();
 
-    echo json_encode(["success" => true, "message" => "Thanh toán qua COD thành công!"]);
+    // Xóa đơn hàng pending
+    $stmt = $conn->prepare("DELETE FROM orders WHERE order_id = ? AND order_status = 'completed'");
+    $stmt->bind_param("i", $order_id);
+    $stmt->execute();
+
+    echo json_encode(["success" => true, "message" => "Thanh toán thành công!"]);
 } catch (Exception $e) {
     error_log("Lỗi: " + $e->getMessage());
-    echo json_encode(["success" => false, "message" => "Lỗi thanh toán COD: " + $e->getMessage()]);
+    echo json_encode(["success" => false, "message" => "Lỗi thanh toán: " + $e->getMessage()]);
 } finally {
     if (isset($stmt)) $stmt->close();
     if (isset($conn)) $conn->close();
 }
+?>

@@ -94,12 +94,111 @@ function formatCurrency(amount) {
     return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-// Hàm xem chi tiết đơn hàng (giả sử mở popup hoặc chuyển hướng)
-function viewOrderDetails(orderId) {
-    console.log("Xem chi tiết đơn hàng ID:", orderId);
-    alert("Xem chi tiết đơn hàng " + orderId + " (chức năng cần triển khai thêm)");
+// Hàm xem chi tiết đơn hàng
+async function viewOrderDetails(orderId) {
+    try {
+        // Sửa đường dẫn API để trỏ đến backend trên XAMPP (localhost:80)
+        const response = await fetch(`http://localhost/gomseller/BE/api/order_details.php?id=${orderId}`, {
+            method: 'GET',
+            mode: 'cors',
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Lỗi server: ${response.status} - ${errorData.message || await response.text()}`);
+        }
+
+        const orderDetails = await response.json();
+        console.log("Chi tiết đơn hàng:", orderDetails);
+
+        // Hiển thị modal
+        const modal = document.getElementById("orderDetailsModal");
+        const modalContent = document.getElementById("orderDetailsContent");
+
+        // Điền thông tin cơ bản của đơn hàng
+        document.getElementById("detailOrderId").textContent = orderDetails.order_id || "N/A";
+        document.getElementById("detailUser").textContent = orderDetails.username || orderDetails.user_id || "Không rõ";
+        document.getElementById("detailTotalPrice").textContent = formatCurrency(orderDetails.total_price) + " VND";
+        document.getElementById("detailStatus").textContent = orderDetails.order_status || "N/A";
+        document.getElementById("detailOrderDate").textContent = orderDetails.order_date || "N/A";
+
+        // Điền chi tiết sản phẩm
+        const itemsBody = document.getElementById("orderItemsBody");
+        itemsBody.innerHTML = ""; // Xóa nội dung cũ
+
+        if (Array.isArray(orderDetails.items) && orderDetails.items.length > 0) {
+            orderDetails.items.forEach(item => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${item.product_name || "N/A"}</td>
+                    <td>${item.quantity || 0}</td>
+                    <td>${formatCurrency(item.price) || "0"} VND</td>
+                    <td>${formatCurrency(item.price * item.quantity) || "0"} VND</td>
+                `;
+                itemsBody.appendChild(row);
+            });
+        } else {
+            itemsBody.innerHTML = "<tr><td colspan='4'>Không có sản phẩm nào trong đơn hàng này.</td></tr>";
+        }
+
+        // Hiển thị modal
+        modal.style.display = "flex";
+
+        // Đóng modal khi nhấn nút "x"
+        const closeBtn = modal.querySelector(".close");
+        closeBtn.onclick = () => {
+            modal.style.display = "none";
+        };
+
+        // Đóng modal khi nhấn ra ngoài
+        window.onclick = (event) => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        };
+
+    } catch (error) {
+        console.error("Lỗi khi lấy chi tiết đơn hàng:", error);
+        alert(`Không thể tải chi tiết đơn hàng. Lỗi: ${error.message}`);
+    }
 }
 
+// Hàm định dạng tiền tệ
+function formatCurrency(amount) {
+    return Number(amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+function exportOrdersToCSV() {
+    if (!window.currentOrders || window.currentOrders.length === 0) {
+        alert("Không có dữ liệu đơn hàng để xuất!");
+        return;
+    }
+
+    // Định nghĩa tiêu đề cột
+    const headers = ["ID Đơn Hàng", "Người Dùng", "Tổng Giá (VND)", "Trạng Thái", "Ngày Đặt"];
+    const rows = window.currentOrders.map(order => [
+        order.order_id,
+        order.user_id,
+        formatCurrency(order.total_price),
+        order.order_status,
+        order.order_date
+    ]);
+
+    // Tạo nội dung CSV
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += headers.join(",") + "\n";
+    rows.forEach(row => {
+        csvContent += row.join(",") + "\n";
+    });
+
+    // Tạo link tải xuống
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "orders_export.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 // Hàm cập nhật trạng thái đơn hàng
 async function updateOrderStatus(orderId) {
     const newStatus = prompt("Nhập trạng thái mới (pending, processing, shipped, completed, cancelled):");

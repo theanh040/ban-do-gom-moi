@@ -72,6 +72,7 @@
                     </table>
                 </div>
             </div>
+    
             <div id="orders" class="content" style="display: none;">
                 <h2>Đơn hàng</h2>
                 <div class="orders-section">
@@ -85,6 +86,8 @@
                             <option value="completed">Hoàn thành</option>
                             <option value="cancelled">Đã hủy</option>
                         </select>
+                        <button onclick="exportOrdersToCSV()" class="export-btn">Xuất file</button>
+
                     </div>
                     <table id="ordersTable" class="orders-table">
                         <thead>
@@ -101,6 +104,35 @@
                             <!-- Dữ liệu sẽ được thêm động qua JavaScript -->
                         </tbody>
                     </table>
+
+                    <!-- Thêm modal để hiển thị chi tiết đơn hàng -->
+                    <div id="orderDetailsModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <h2>Chi tiết Đơn Hàng</h2>
+                            <div id="orderDetailsContent">
+                                <p><strong>ID Đơn Hàng:</strong> <span id="detailOrderId"></span></p>
+                                <p><strong>Người Dùng:</strong> <span id="detailUser"></span></p>
+                                <p><strong>Tổng Giá:</strong> <span id="detailTotalPrice"></span></p>
+                                <p><strong>Trạng Thái:</strong> <span id="detailStatus"></span></p>
+                                <p><strong>Ngày Đặt:</strong> <span id="detailOrderDate"></span></p>
+                                <h3>Chi tiết Sản Phẩm</h3>
+                                <table id="orderItemsTable" class="order-items-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Tên Sản Phẩm</th>
+                                            <th>Số Lượng</th>
+                                            <th>Giá (VND)</th>
+                                            <th>Tổng (VND)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="orderItemsBody">
+                                        <!-- Dữ liệu sản phẩm sẽ được thêm động qua JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="createPr" class="content" style="display: none;">
@@ -126,13 +158,13 @@
                 <h2>Khách hàng</h2>
                 <div class="customers-section">
                     <div class="customers-actions">
-                        <input type="text" id="customerSearch" placeholder="Tìm kiếm khách hàng..."
-                            class="customer-search">
+                        <input type="text" id="customerSearch" placeholder="Tìm kiếm khách hàng..." class="customer-search">
                         <select id="customerRoleFilter" class="customer-role-filter">
                             <option value="">Tất cả vai trò</option>
                             <option value="admin">Admin</option>
                             <option value="customer">Khách hàng</option>
                         </select>
+                        <button onclick="exportCustomersToCSV()" class="export-btn">Xuất file</button>
                     </div>
                     <table id="customersTable" class="customers-table">
                         <thead>
@@ -149,6 +181,21 @@
                             <!-- Dữ liệu sẽ được thêm động qua JavaScript -->
                         </tbody>
                     </table>
+            
+                    <!-- Modal để hiển thị chi tiết khách hàng -->
+                    <div id="customerDetailsModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close">×</span>
+                            <h2>Chi tiết Khách Hàng</h2>
+                            <div id="customerDetailsContent">
+                                <p><strong>ID Khách Hàng:</strong> <span id="detailCustomerId"></span></p>
+                                <p><strong>Tên Đăng Nhập:</strong> <span id="detailUsername"></span></p>
+                                <p><strong>Email:</strong> <span id="detailEmail"></span></p>
+                                <p><strong>Vai Trò:</strong> <span id="detailRole"></span></p>
+                                <p><strong>Ngày Đăng Ký:</strong> <span id="detailRegistrationDate"></span></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="reports" class="content" style="display: none;">
@@ -164,6 +211,7 @@
                         </select>
                         <input type="date" id="reportDate" class="report-date-filter">
                         <button onclick="loadReports()" class="report-refresh-btn">Làm mới</button>
+                        <button onclick="exportReportsToCSV()" class="export-btn">Xuất file</button>
                     </div>
                     <div id="reportsContent" class="reports-content">
                         <h3>Kết quả báo cáo</h3>

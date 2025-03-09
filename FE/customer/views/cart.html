@@ -70,7 +70,30 @@
             </div>
         </div>
         <p class="cart-empty" id="cart-empty">Giỏ hàng của bạn đang trống. <a href="/FE/index.html">Mua sắm ngay!</a></p>
-    </main>
+    
+        <!-- Modal để nhập thông tin người mua -->
+        <div id="buyerInfoModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Thông tin người mua</h2>
+                <form id="buyerInfoForm">
+                    <div class="form-group">
+                        <label for="buyerName">Họ và tên:</label>
+                        <input type="text" id="buyerName" name="buyerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="buyerPhone">Số điện thoại:</label>
+                        <input type="tel" id="buyerPhone" name="buyerPhone" required pattern="[0-9]{10}" placeholder="Ví dụ: 0901234567">
+                    </div>
+                    <div class="form-group">
+                        <label for="buyerAddress">Địa chỉ giao hàng:</label>
+                        <textarea id="buyerAddress" name="buyerAddress" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Tiếp tục</button>
+                </form>
+            </div>
+        </div>
+    
     <script src="/FE/customer/js/cart.js" defer></script>
     <script src="/FE/customer/js/index.js" defer></script>
     <script src="/FE/customer/js/nav.js" defer></script>

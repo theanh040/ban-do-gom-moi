@@ -132,3 +132,29 @@ async function loadReports() {
         alert("Không thể tải dữ liệu báo cáo. Vui lòng thử lại: " + error.message);
     }
 }
+function exportReportsToCSV() {
+    if (!window.currentReports || window.currentReports.length === 0) {
+        alert("Không có dữ liệu báo cáo để xuất!");
+        return;
+    }
+
+    const headers = ["Thời Gian", "Doanh Thu (VND)"];
+    const rows = window.currentReports.map(report => [
+        report.label,
+        report.revenue
+    ]);
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += headers.join(",") + "\n";
+    rows.forEach(row => {
+        csvContent += row.join(",") + "\n";
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "reports_export.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}

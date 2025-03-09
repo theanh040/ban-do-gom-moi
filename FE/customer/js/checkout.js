@@ -10,6 +10,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const qrAmount = document.getElementById("qr-amount");
     const confirmQrPaymentBtn = document.getElementById("confirm-qr-payment");
     const paymentResult = document.getElementById("payment-result");
+    const buyerNameDisplay = document.getElementById("buyerNameDisplay");
+    const buyerPhoneDisplay = document.getElementById("buyerPhoneDisplay");
+    const buyerAddressDisplay = document.getElementById("buyerAddressDisplay");
+    const editBuyerInfoBtn = document.getElementById("editBuyerInfoBtn");
 
     let userId = localStorage.getItem("loggedInUserId");
     const loggedInUser = localStorage.getItem("loggedInUser");
@@ -43,6 +47,24 @@ document.addEventListener("DOMContentLoaded", async () => {
             return null;
         }
         return JSON.parse(cartData);
+    }
+
+    // Load thông tin người mua từ localStorage
+    function loadBuyerInfo() {
+        const buyerInfo = localStorage.getItem("buyerInfo");
+        if (!buyerInfo) {
+            alert("Không có thông tin người mua. Vui lòng quay lại giỏ hàng để nhập.");
+            window.location.href = "/FE/customer/views/cart.html";
+            return null;
+        }
+        return JSON.parse(buyerInfo);
+    }
+
+    // Hiển thị thông tin người mua
+    function displayBuyerInfo(buyerInfo) {
+        buyerNameDisplay.textContent = buyerInfo.name || "N/A";
+        buyerPhoneDisplay.textContent = buyerInfo.phone || "N/A";
+        buyerAddressDisplay.textContent = buyerInfo.address || "N/A";
     }
 
     // Render thông tin đơn hàng
@@ -87,13 +109,17 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (cart) {
                     const total = cart.order_items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
                     qrAmount.textContent = formatPrice(total);
-                    // Cập nhật URL mã QR với số tiền (nếu VietQR hỗ trợ)
                     qrCodeImg.src = `https://api.vietqr.io/image/970407-19073820149015-NGefe7a.jpg?accountName=NGUYEN%20THE%20ANH&amount=${total}`;
                 }
             } else {
                 qrContainer.style.display = "none";
             }
         });
+    });
+
+    // Xử lý nút chỉnh sửa thông tin người mua
+    editBuyerInfoBtn.addEventListener("click", () => {
+        window.location.href = "/FE/customer/views/cart.html";
     });
 
     // Xử lý xác nhận thanh toán
@@ -106,14 +132,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
+        const buyerInfo = loadBuyerInfo();
+        if (!buyerInfo) return;
+
         try {
             let response;
             if (paymentMethod === "qr") {
-                // Xác nhận thanh toán qua QR (gọi API để kiểm tra giao dịch)
                 response = await handleQRPayment(userId);
             } else if (paymentMethod === "cod") {
-                // Xử lý thanh toán COD
-                response = await handleCODPayment(userId);
+                response = await handleCODPayment(userId, buyerInfo);
             }
 
             if (!response.ok) {
@@ -125,9 +152,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             let result = await response.json();
             paymentResult.className = "payment-result success";
             paymentResult.textContent = "Thanh toán thành công!";
-            // Xóa dữ liệu giỏ hàng khỏi localStorage sau thanh toán
             localStorage.removeItem("checkoutCart");
-            // Chuyển hướng về cart.html sau 2 giây
+            localStorage.removeItem("buyerInfo");
             setTimeout(() => {
                 window.location.href = "/FE/customer/views/cart.html";
             }, 2000);
@@ -154,9 +180,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 let result = await response.json();
                 paymentResult.className = "payment-result success";
                 paymentResult.textContent = "Thanh toán thành công!";
-                // Xóa dữ liệu giỏ hàng khỏi localStorage sau thanh toán
                 localStorage.removeItem("checkoutCart");
-                // Chuyển hướng về cart.html sau 2 giây
+                localStorage.removeItem("buyerInfo");
                 setTimeout(() => {
                     window.location.href = "/FE/customer/views/cart.html";
                 }, 2000);
@@ -174,7 +199,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const cart = loadCartFromLocalStorage();
         if (!cart) return;
         const orderTotal = cart.order_items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        let response = await fetch(`http://localhost:3000/BE/api/checkout_qr.php`, {
+        let response = await fetch(`http://localhost/gomseller/BE/api/checkout_qr.php`, {
             method: "POST",
             body: JSON.stringify({ user_id: userId, amount: orderTotal }),
             headers: { "Content-Type": "application/json" },
@@ -183,21 +208,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // Hàm xử lý thanh toán COD
-    async function handleCODPayment(userId) {
+    async function handleCODPayment(userId, buyerInfo) {
         console.log("Thực hiện thanh toán COD cho user_id:", userId);
         const cart = loadCartFromLocalStorage();
         if (!cart) return;
-        let response = await fetch(`http://localhost:3000/BE/api/checkout_cod.php`, {
+        let response = await fetch(`http://localhost/gomseller/BE/api/checkout_cod.php`, {
             method: "POST",
-            body: JSON.stringify({ user_id: userId }),
+            body: JSON.stringify({ 
+                user_id: userId,
+                buyer_name: buyerInfo.name,
+                buyer_phone: buyerInfo.phone,
+                buyer_address: buyerInfo.address
+            }),
             headers: { "Content-Type": "application/json" },
         });
         return response;
     }
 
-    // Tải giỏ hàng khi vào trang
+    // Tải và hiển thị dữ liệu khi vào trang
     const cart = loadCartFromLocalStorage();
-    if (cart) {
+    const buyerInfo = loadBuyerInfo();
+    if (cart && buyerInfo) {
         renderOrderSummary(cart);
+        displayBuyerInfo(buyerInfo);
     }
 });

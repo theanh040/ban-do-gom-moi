@@ -76,12 +76,82 @@ async function loadCustomers() {
     }
 }
 
-// Hàm xem chi tiết khách hàng (giả sử mở popup hoặc chuyển hướng)
-function viewCustomerDetails(userId) {
-    console.log("Xem chi tiết khách hàng ID:", userId);
-    alert("Xem chi tiết khách hàng " + userId + " (chức năng cần triển khai thêm)");
-}
+async function viewCustomerDetails(userId) {
+    try {
+        const response = await fetch(`http://localhost/gomseller/BE/api/customer_details.php?id=${userId}`, {
+            method: 'GET',
+            mode: 'cors',
+        });
 
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Lỗi server: ${response.status} - ${errorData.message || await response.text()}`);
+        }
+
+        const customerDetails = await response.json();
+        console.log("Chi tiết khách hàng:", customerDetails);
+
+        // Hiển thị modal
+        const modal = document.getElementById("customerDetailsModal");
+        const modalContent = document.getElementById("customerDetailsContent");
+
+        // Điền thông tin khách hàng
+        document.getElementById("detailCustomerId").textContent = customerDetails.user_id || "N/A";
+        document.getElementById("detailUsername").textContent = customerDetails.username || "N/A";
+        document.getElementById("detailEmail").textContent = customerDetails.email || "N/A";
+        document.getElementById("detailRole").textContent = customerDetails.role || "N/A";
+        document.getElementById("detailRegistrationDate").textContent = customerDetails.created_at || "N/A";
+
+        // Hiển thị modal
+        modal.style.display = "flex";
+
+        // Đóng modal khi nhấn nút "x"
+        const closeBtn = modal.querySelector(".close");
+        closeBtn.onclick = () => {
+            modal.style.display = "none";
+        };
+
+        // Đóng modal khi nhấn ra ngoài
+        window.onclick = (event) => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        };
+
+    } catch (error) {
+        console.error("Lỗi khi lấy chi tiết khách hàng:", error);
+        alert(`Không thể tải chi tiết khách hàng. Lỗi: ${error.message}`);
+    }
+}
+function exportCustomersToCSV() {
+    if (!window.currentCustomers || window.currentCustomers.length === 0) {
+        alert("Không có dữ liệu khách hàng để xuất!");
+        return;
+    }
+
+    const headers = ["ID Khách Hàng", "Tên Đăng Nhập", "Email", "Vai Trò", "Ngày Đăng Ký"];
+    const rows = window.currentCustomers.map(customer => [
+        customer.user_id,
+        customer.username,
+        customer.email,
+        customer.role,
+        customer.created_at
+    ]);
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += headers.join(",") + "\n";
+    rows.forEach(row => {
+        csvContent += row.join(",") + "\n";
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "customers_export.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 // Hàm cập nhật thông tin khách hàng
 async function updateCustomer(userId) {
     const username = prompt("Nhập tên đăng nhập mới:");

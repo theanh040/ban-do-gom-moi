@@ -19,7 +19,7 @@ if (!$conn) {
     exit;
 }
 
-// Nhận product_id từ URL
+    // Nhận product_id từ URL
 $product_id = isset($_GET['id']) ? filter_var($_GET['id'], FILTER_VALIDATE_INT) : 0;
 
 if ($product_id <= 0) {

@@ -8,9 +8,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const totalPriceElement = document.getElementById("total-price");
     const cartEmpty = document.getElementById("cart-empty");
     const checkoutBtn = document.getElementById("checkout-btn");
+    const buyerInfoModal = document.getElementById("buyerInfoModal");
+    const buyerInfoForm = document.getElementById("buyerInfoForm");
 
-    if (!cartItems || !totalPriceElement || !cartEmpty || !checkoutBtn) {
-        console.error("Không tìm thấy một hoặc nhiều phần tử: cart-items, total-price, cart-empty, checkout-btn");
+    if (!cartItems || !totalPriceElement || !cartEmpty || !checkoutBtn || !buyerInfoModal || !buyerInfoForm) {
+        console.error("Không tìm thấy một hoặc nhiều phần tử: cart-items, total-price, cart-empty, checkout-btn, buyerInfoModal, buyerInfoForm");
     }
 
     let userId = localStorage.getItem("loggedInUserId");
@@ -22,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function() {
     async function getUserId(username) {
         console.log("Gọi getUserId với username:", username);
         try {
-            let response = await fetch(`http://localhost:3000/BE/api/user.php?username=${username}`, {
+            let response = await fetch(`http://localhost/gomseller/BE/api/user.php?username=${username}`, {
                 method: "GET",
             });
             if (!response.ok) {
@@ -91,8 +93,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         try {
-            console.log("Gửi request GET đến http://localhost:3000/BE/api/cart.php?user_id=" + userId);
-            let response = await fetch(`http://localhost:3000/BE/api/cart.php?user_id=${userId}`, {
+            console.log("Gửi request GET đến http://localhost/gomseller/BE/api/cart.php?user_id=" + userId);
+            let response = await fetch(`http://localhost/gomseller/BE/api/cart.php?user_id=${userId}`, {
                 method: "GET",
             });
             console.log("Response status:", response.status);
@@ -117,12 +119,12 @@ document.addEventListener("DOMContentLoaded", function() {
             cartItems.innerHTML = "<tr><td colspan='5'><p>Giỏ hàng trống.</p></td></tr>";
             totalPriceElement.textContent = "0 VNĐ";
             cartEmpty.style.display = "block";
-            if (checkoutBtn) checkoutBtn.style.display = "none"; // Ẩn nút thanh toán khi giỏ rỗng
+            if (checkoutBtn) checkoutBtn.style.display = "none";
             return;
         }
 
         cartEmpty.style.display = "none";
-        if (checkoutBtn) checkoutBtn.style.display = "inline-block"; // Hiển thị nút thanh toán khi có sản phẩm
+        if (checkoutBtn) checkoutBtn.style.display = "inline-block";
         let totalPrice = 0;
         cart.order_items.forEach(item => {
             console.log("Đang render sản phẩm:", item);
@@ -153,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         try {
-            let response = await fetch(`http://localhost:3000/BE/api/cart.php`, {
+            let response = await fetch(`http://localhost/gomseller/BE/api/cart.php`, {
                 method: "PUT",
                 body: JSON.stringify({ user_id: userId, product_id: productId, quantity: parseInt(quantity) }),
                 headers: { "Content-Type": "application/json" },
@@ -176,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         try {
-            let response = await fetch(`http://localhost:3000/BE/api/cart.php`, {
+            let response = await fetch(`http://localhost/gomseller/BE/api/cart.php`, {
                 method: "DELETE",
                 body: JSON.stringify({ user_id: userId, product_id: productId }),
                 headers: { "Content-Type": "application/json" },
@@ -192,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // Cập nhật chức năng thanh toán để chuyển hướng đến checkout.html
+    // Hiển thị modal nhập thông tin người mua khi nhấn Thanh toán
     if (checkoutBtn) {
         checkoutBtn.addEventListener("click", async function() {
             let userId = localStorage.getItem("loggedInUserId");
@@ -202,22 +204,54 @@ document.addEventListener("DOMContentLoaded", function() {
                 return;
             }
 
-            if (!confirm("Bạn có chắc muốn thanh toán giỏ hàng này?")) {
-                return;
-            }
+            // Hiển thị modal
+            buyerInfoModal.style.display = "flex";
+
+            // Đóng modal khi nhấn nút "x"
+            const closeBtn = buyerInfoModal.querySelector(".close");
+            closeBtn.onclick = () => {
+                buyerInfoModal.style.display = "none";
+            };
+
+            // Đóng modal khi nhấn ra ngoài
+            window.onclick = (event) => {
+                if (event.target === buyerInfoModal) {
+                    buyerInfoModal.style.display = "none";
+                }
+            };
+        });
+    }
+
+    // Xử lý form thông tin người mua
+    if (buyerInfoForm) {
+        buyerInfoForm.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const buyerName = document.getElementById("buyerName").value;
+            const buyerPhone = document.getElementById("buyerPhone").value;
+            const buyerAddress = document.getElementById("buyerAddress").value;
+
+            // Lưu thông tin người mua vào localStorage
+            const buyerInfo = {
+                name: buyerName,
+                phone: buyerPhone,
+                address: buyerAddress
+            };
+            localStorage.setItem("buyerInfo", JSON.stringify(buyerInfo));
 
             // Lấy thông tin giỏ hàng để truyền sang checkout
+            let userId = localStorage.getItem("loggedInUserId");
             try {
-                let response = await fetch(`http://localhost:3000/BE/api/cart.php?user_id=${userId}`, {
+                let response = await fetch(`http://localhost/gomseller/BE/api/cart.php?user_id=${userId}`, {
                     method: "GET",
                 });
                 if (!response.ok) {
                     throw new Error("Lỗi tải giỏ hàng: " + response.status);
                 }
                 let cart = await response.json();
-                // Lưu thông tin giỏ hàng vào localStorage để dùng ở checkout
                 localStorage.setItem("checkoutCart", JSON.stringify(cart));
-                // Chuyển hướng đến trang checkout
+                // Đóng modal và chuyển hướng
+                buyerInfoModal.style.display = "none";
                 window.location.href = "/FE/customer/views/checkout.html";
             } catch (error) {
                 console.error("Lỗi:", error);
